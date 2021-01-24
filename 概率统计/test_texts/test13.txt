@@ -1,0 +1,21 @@
+Concept
+For Lucid Lynx , the technical goal of Impression and Night Impression is to bring both themes to a common code base. The differences between the two themes is visible in the background color of the menu panels, the color of the scroll bars, and the adoption of the Humanity icon theme for Impression and the Humanity-Dark icon theme for Night Impression.
+
+The desire is to offer two themes from the Ubuntu community to stand side-by-side with the professionally developed Human theme from Canonical.
+
+The objective is to enhance the user computing experience by applying balance and harmony to the Gnome Desktop framing applications in such a manner as to permit the eye to focus without distraction on the content displayed.
+
+As many users express a desire to use a theme framed in dark borders and titles as evidenced by the number of "dark" themes submitted to sites such as Ubuntu Art and Gnome Art, the pallets of Impression and Night Impression are as dark as practical.
+
+The author assumes many Gnome applications were designed anticipating the desktop would be brushed in lighter colors and these solutions may not present well against a dark canvas. Key subject areas from the standard Ubuntu installation provided guidance in creating the final solution. For the most part desktop and embedded application icons were the metric for determining panel colors. The author concedes dark icons display poorly against a dark background.
+
+Once the base color was discovered the task became adding additional complimentary colors. The "toolbar" provides a styling opportunity using adding the gradient functionality of the murrine engine. Lighting the "toolbar" buttons is another opportunity as exhibited by Nautilus.
+
+Bluefish is a good example of the use of Notebook tabs which are also themed in Firefox.
+
+Finally, the gold standard in my opinion is the Inkscape application which uses a wide variety of GTK widgets.
+
+As Lucid Lynx is a Long Term Support (LTS) release the emphasis is stability and changes have been keep to a minimum.
+
+
+Impression Desktop Featuring Lucid Butterfly Wallpaper

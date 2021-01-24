@@ -1,0 +1,109 @@
+New Features in Mythbuntu
+This release of Mythbuntu will be following the LTS development cycle and contains many new features.
+
+Changes for Mythbuntu 12.04.1
+We've picked up all the standard Ubuntu updates.
+We have updated to MythTV 0.25.2 which fixes a bunch of bugs that were found after our initial release.
+The installer will no longer wipe databases for MySQL and MythTV during installation if you do an "in place" upgrade.
+Mythbuntu Applications
+The newest version of MythTV: MythTV 0.25.2. It includes lots of new features including HTTP live streaming, VAAPI, Airtunes/Airplay, and 3D video. For a more in depth list, please see http://mythbuntu.org/mythtv/0.25
+
+Mythbuntu repositories is integrated directly into MCC and no longer an external plugin.
+The Mythbuntu backup client has been improved and should work better in more situations.
+Common Infrastructure
+Up until Ubuntu 11.10, administrator access using the sudo tool was granted via the "admin" Unix group. In Ubuntu 12.04, administrator access will be granted via the "sudo" group. This makes Ubuntu more consistent with the upstream implementation and Debian. For compatibility purposes, the "admin" group will continue to provide sudo/administrator access in 12.04.
+Hibernate (suspend to disk) has been disabled by default, as it was found to be unreliable, very slow and confusing to have two suspend modes. See bug 812394 for details. If you want to re-enable it, please follow this recipe.
+
+pm-utils now has two new scripts to power down USB and various PCI devices in battery mode. A number of desktop packages were fixed to wake up less often. Both of these reduce power consumption and thus improve battery lifetime.
+resolvconf is now used to manage /etc/resolv.conf on all Ubuntu systems. You can learn more here
+
+Backports are now more easily accessible -- to enable users to more easily receive new versions of software, the Ubuntu Backports repository is now enabled by default. Packages from backports will not be installed by default — they must explicitly be selected in package management software. However, once installed, packages from backports will automatically be upgraded to newer versions.
+DVD Images -- the DVD images have been cleaned up significantly reducing their size to around 1.5GB to ease consumption. The remaining software remains available via download.
+As of 12.04.2, it is possible to install on UEFI systems with Secure Boot enabled (using signed versions of Shim, GRUB, and the Linux kernel). This is only currently set up for Ubuntu (desktop, alternate, and server) and Edubuntu images due to pressures of time; we expect to enable it across the entire Ubuntu family for 12.04.3.
+Both the 3.2 and 3.5 versions of the Linux kernel included as part of the 12.04.2 release have a workaround for 1040557, which bricked some models of Samsung laptops when installing Ubuntu in UEFI mode. (The underlying problem is a firmware bug, and may still be triggerable in other ways.)
+
+Ubuntu Kernel 3.5.0-23.35
+By default, the 12.04.2 point release will ship with a newer 3.5.0-23.35 Ubuntu kernel from Quantal, and a matching X.org stack. This is based on the 3.5.7.2 Extended Upstream Stable Kernel Release. The purpose of providing a newer kernel in the 12.04.2 point release is for hardware enablement. For more information regarding the 12.04.2 LTS Hardware Enablement Stack, please refer to:
+
+https://wiki.ubuntu.com/PrecisePangolin/ReleaseNotes/UbuntuDesktop#LTS_Hardware_Enablement_Stack
+
+Due to pressures of time, only Ubuntu (desktop, alternate, and server), Edubuntu, and Mythbuntu images use the enablement stack in 12.04.2. We expect to convert other flavours in 12.04.3.
+
+Upstart 1.5
+Upstart has been updated to version 1.5. More details are available in the Upstart Technical Overview.
+
+GNU Toolchain
+Ubuntu 12.04 is distributed with a default toolchain that includes: GCC 4.6.3 (and changes from Linaro GCC 4.6-2012.02), binutils 2.22, eglibc 2.15, and Linaro gdb 7.4-2012.04.
+
+Compared to the 11.10 release the toolchain did see only incremental changes and bug fixes; comparing to the 10.04 LTS release, GCC updates include
+
+Updated frontends for better standards support (Ada 2012, Objective-C 2.0, improved experimental support for the upcoming C++0x ISO C++ standard, Fortran 2003 and 2008 improvements, new Go frontend)
+Improved optimizations, including better inter-procedural optimizations, and link time optimization (LTO).
+Further information can be found upstream (GCC-4.6, GCC-4.5, binutils, gas, ld, gdb).
+
+Python Toolchain
+Ubuntu 12.04 includes Python 2.7.3 and Python 3.2.3 Python 2.6 is no longer available for install.
+
+There is expanded support for Python 3 in this release, with Python 3 ports of python-dbus, python-feedparser, germinate, lazr.ui, wadllib, python-defer, python-keyring, and python-qt4 now included, among others.
+Java Toolchain
+The default run time for Java is OpenJDK 6b24 (IcedTea 1.11.1). OpenJDK 7u3 (IcedTea 2.1) is available in the archive as well.
+
+Installation
+Overview
+Preparing your computer for Mythbuntu is now much simpler, with a wider range of disk setup options. Each of these are detailed at length to provide you with a clear understanding of the actions that will take place with your selection.
+
+You can now reinstall or upgrade an existing copy of Mythbuntu with the CD installer, provided that your computer is connected to the Internet.
+
+Download
+Mythbuntu 12.04.1 images can be downloaded from:
+
+http://cdimage.ubuntu.com/mythbuntu/releases/12.04.1/release/ (Mythbuntu)
+
+System Requirements
+The minimum memory requirement for Mythbuntu 12.04 is 512 MB of memory. It is highly recommended that you have 2GB or more memory though so that the system will perform much better. You can view more information about other recommended hardware on the Mythbuntu website at: http://mythbuntu.org/requirements.
+
+Upgrading
+Upgrading from Mythbuntu 11.10 or 10.04
+To upgrade from Mythbuntu 11.10 or 10.04, check Update Manager for updates. Update Manager should display the following message: "New distribution release '12.04' is available. Click Upgrade and follow the on-screen instructions".
+
+Upgrading from Other Releases
+Users of other Mythbuntu releases need to upgrade first to 11.10, or 10.04 and then to 12.04.
+
+For further information on upgrading to 11.10, please see the Ubuntu Oneiric upgrade instructions.
+
+Known Issues
+Graphics and Display
+Setting up a machine without a network connection will cause the backend to not start on boot. If this happens and you plan to run it without a network connection, you'll need to modify the upstart job. To do this, modify /etc/init/mythtv-backend.conf and remove the and "IFACE!=lo".
+Applications
+Boot, Installation and Post-Installation
+Importing of existing Windows user accounts fails in some cases. (987902)
+
+
+Wubi (the Ubuntu installer for Windows) is not available as an option on the Ubuntu Desktop/DVD any more. Instead, it is now a separate download.
+Some Lenovo systems are unable to boot unsigned kernels in UEFI mode with Secure Boot enabled. (1087501)
+
+Sometimes enters failsafe-x mode when booting into Live Session in virtualbox with i386, yet booting from failsafe-x just freezes system. Workaround is to use amd64. (1124660)
+
+A bug in the firmware on certain Samsung laptop models leaves these machines at risk of being rendered inoperable ("bricked") when booted in UEFI mode. Steps have been taken with the kernel in 12.04.2 to mitigate this problem, but only a future firmware update from Samsung will resolve this issue with 100% reliability. It is therefore recommended that users boot their systems in CSM ("compatibility support module") mode to avoid this issue. (1040557)
+
+Upgrades
+If you have overridden the value of APT::Cache-Limit in /etc/apt/apt.conf or /etc/apt/apt.conf.d, you should remove these settings before upgrading. The release-upgrader-apt used by update-manager for upgrades from lucid to precise no longer has any hard coded limit on the cache size.
+Aptitude does not work on 64-bit systems without disabling multiarch in /etc/dpkg/dpkg.cfg.d/multiarch . (831768)
+
+If you are running a KVM host with libvirt and are upgrading from Ubuntu 10.04 LTS to 12.04 LTS you may find that some existing virtual machines are no longer recognized (virsh list --all). A change to each guest's XML file may be needed, related to how console and serial devices are now configured. (931350)
+
+Kernel
+On ARM omap images, the networking support for the Beagle XM board is broken (838200)
+
+On systems with an ATI Radeon 9200 graphics card the system will boot to a black screen. As a work around edit the kernel command line in the boot loader and add "nomodeset". (725580)
+
+Fujitsu Siemens Amilo M 7400 and Maxdata 7000DX wireless RF kill handling triggers a kernel panic preventing wireless from operating correctly. This may be worked around by editing your kernel command line and adding "noexec=off". (979253)
+
+Beagle XM systems which are capable of running at 1GHZ will be initialised at 800MHZ leading to slower than optimal performance. (771537)
+
+Some EFI systems fail to boot in EFI mode. BIOS mode is advised in these situations. (721576)
+
+Support
+Mythbuntu is now supported on an LTS cycle. This means you should continue to have updates available all the way through the next LTS, currently slated to be 14.04.
+Any updated MythTV releases will be made available via an addon repository via the mythbuntu control centre.
+For help, please visit the Mythbuntu forums (http://ubuntuforums.org/forumdisplay.php?f=301). We also have mailing lists and IRC channels, but the forums are the recommended way to get help.

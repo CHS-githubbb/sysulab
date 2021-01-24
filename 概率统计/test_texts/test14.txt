@@ -1,0 +1,152 @@
+OpenStack Core Packages - How to update, build, and contribute
+Overview
+Ubuntu maintains its own set of Git repositories on Launchpad.
+
+Background
+The following tasks require a basic knowledge of Ubuntu packaging. For an introduction, see the Ubuntu Packaging Guide.
+
+Git Configuration
+First, you'll want to setup git to simplify your work-flow. See 'Configuring Git' in the Launchpad git documentation.
+
+Tools
+The OpenStack packaging git repositories all make use of git-buildpackage and pristine-tar for managing upstream release tarballs.
+
+For a general overview of git-buildpackage and pristine-tar, see the Debian documentation. This wiki page details the specifics of how we use these tools in Ubuntu.
+
+Branches
+The current development release packaging is maintained under the 'master' branch; released versions of OpenStack will mirror upstream branch management - e.g. stable/queens.
+
+Cloning a git repository
+If you are running on the latests Ubuntu release, then the following should dtrt:
+
+
+debcheckout --git-track='*' <projectname>
+for example
+
+
+debcheckout --git-track='*' nova
+Using the git-track option ensures that all required branches are automatically setup - for example:
+
+
+$ git branch
+* master
+  pristine-tar
+  upstream
+The 'upstream' and 'pristine-tar' branches are used by git-buildpackage to manage the upstream release tarballs.
+
+If you're not on the latest Ubuntu release then directly clone the repository and checkout the branches:
+
+
+git clone lp:~ubuntu-server-dev/ubuntu/+source/nova
+git checkout pristine-tar
+git checkout upstream
+git checkout master
+Alternatively, if you haven't configured git to work with Launchpad (see 'Git Configuration' above), you can clone with:
+
+
+git clone https://git.launchpad.net/~ubuntu-server-dev/ubuntu/+source/nova
+Building a source package
+For all packages except horizon, use the buildpackage subcommand of gbp:
+
+
+gbp buildpackage -S
+To build without signing the .changes/.dsc files:
+
+
+gbp buildpackage -S -us -uc
+The source package will be places in ../build-area.
+
+For horizon, we bundle the xstatic code alongside the upstream release tarball, so horizon has 2 orig tarballs. This requires the use of debuild:
+
+
+debuild -S -sa
+To generate a new xstatic orig tarball (see horizon/debian/README.source):
+
+
+./debian/rules refresh-xstatic
+Re-generating xstatic files for stable releases can be problematic. The general recommendation is to download the existing xstatic orig tarball from Launchpad and rename it accordingly.
+
+Building Debian packages
+We generally use sbuild to build debian packages.
+
+Steps for building an OpenStack Queens package for bionic:
+
+
+mk-sbuild bionic
+sbuild-update -udc bionic-amd64
+sbuild -A -d bionic-amd64 <path-to-dsc-file>
+For initial setup steps see: https://wiki.ubuntu.com/SimpleSbuild
+
+Steps for building an OpenStack Queens package for xenial:
+
+
+sudo add-apt-repository ppa:ubuntu-cloud-archive/tools
+sudo apt update
+sudo apt install cloud-archive-utils
+mk-sbuild xenial
+sbuild-update -udc xenial-amd64
+sbuild-queens -A -d xenial-amd64 <path-to-dsc-file>
+Making a packaging change
+Each independent change should be committed separately to the git repository, and each change should include a short description of the change in debian/changelog. To make your initial update to debian/changelog:
+
+
+dch -i
+After the initial update you can edit the changelog with your favorite editor.
+
+Make your packaging changes as you normally would under the debian folder; then use 'git add' to add the changed files to the staging area; if you have added an appropriate changelog comment then:
+
+
+debcommit
+will DTRT and annotate the git commit with the changelog entry details - you get a chance to edit this if you have provided anything other than a single line entry to the changelog.
+
+Updating to a new release
+First, grab the new upstream release:
+
+
+uscan --verbose --rename  (and optionally: --download-version <version>)
+this will drop the orig.tar.gz into the parent folder of the git repository. Then use git-buildpackage to import the archive:
+
+
+gbp import-orig ../nova_12.0.0~b1.orig.tar.gz
+This action will import the content into the upstream branch, create the required pristine-tar data and place it in the pristine-tar branch, and then merge the upstream branch into the master branch (or stable branch).
+
+Maintainers - release a package and push updates to Launchpad
+Change the Ubuntu release in d/changelog from UNRELEASED to the corresponding Ubuntu release name and:
+
+git commit -m "releasing package $package version $version-$ubuntu_vers" debian/changelog
+Then tag the release:
+
+git tag -s debian/$version -m "tagging package $package version debian/$version"
+Then push any local commits and tags to Launchpad:
+
+
+git push --all
+git push --tags
+NOTE: you need to be a member of the ubuntu-server-dev team to be able todo this - this includes all Ubuntu Core Developers.
+
+Contributors - pushing a personal repository to Launchpad
+To push any local commits and tags to Launchpad:
+
+
+git push --all lp:~<launchpad-id>/ubuntu/+source/nova
+git push --tags lp:~<launchpad-id>/ubuntu/+source/nova
+Contributors - proposing a change
+There are a few ways to propose a package change:
+
+1. Reference your git repo in the bug report:
+
+
+lp:~<launchpad-id>/ubuntu/+source/nova
+2. Attach a debdiff to the bug report:
+
+
+debdiff nova_current_version.dsc nova_new_version.dsc > nova_new_version.debdiff
+3. Create a launchpad merge proposal:
+
+Navigate to the URL of your pushed repository: https://code.launchpad.net/~<launchpad-id>/ubuntu/+source/nova/+git/nova
+
+Propose each branch separately:
+
+Click on the branch name and 'Propose for merging'
+Select the target repository: lp:~ubuntu-server-dev/ubuntu/+source/nova
+Select the target reference path: master, upstream, or pristine-tar
